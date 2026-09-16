@@ -27,6 +27,10 @@ export async function authenticate(
   }
 }
 
+export async function signInWithMicrosoft() {
+  await signIn('microsoft-entra-id');
+}
+
 const FormSchema = z.object({
     id: z.string(),
     customerId: z.string({ invalid_type_error: 'Please select a customer.', }),
