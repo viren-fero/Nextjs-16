@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1400px; height: 725px; background: #ffffff;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1f2937;
+    padding: 40px 48px;
+  }
+  h1 { font-size: 30px; font-weight: 700; text-align: center; margin-bottom: 36px; color: #111827; }
+  .row { display: flex; align-items: stretch; justify-content: space-between; }
+  .stage {
+    width: 360px; border-radius: 14px; border: 2px solid; overflow: hidden; background: #fff;
+  }
+  .stage .head { padding: 14px 20px; color: #fff; font-size: 21px; font-weight: 700; }
+  .stage .head small { display: block; font-size: 14px; font-weight: 500; opacity: .9; margin-top: 2px; }
+  .stage ul { list-style: none; padding: 16px 20px 18px; }
+  .stage li { font-size: 17px; padding: 9px 0; display: flex; gap: 12px; align-items: flex-start; line-height: 1.35; }
+  .stage li + li { border-top: 1px dashed #d1d5db; }
+  .n { flex: none; width: 26px; height: 26px; border-radius: 50%; color: #fff; font-size: 14px; font-weight: 700;
+       display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 15px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px; }
+
+  .s1 { border-color: #6366f1; } .s1 .head, .s1 .n { background: #6366f1; }
+  .s2 { border-color: #0891b2; } .s2 .head, .s2 .n { background: #0891b2; }
+  .s3 { border-color: #16a34a; } .s3 .head, .s3 .n { background: #16a34a; }
+
+  .arrow { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 8px; }
+  .arrow svg { width: 100%; height: 30px; }
+  .arrow span { font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 6px; text-align: center; }
+
+  .bottom { display: flex; gap: 28px; margin-top: 34px; }
+  .zip {
+    flex: 1.6; border: 2px dashed #0891b2; border-radius: 14px; padding: 16px 22px; background: #f0fdff;
+  }
+  .zip h2, .gain h2 { font-size: 18px; margin-bottom: 10px; }
+  .tree { font-family: Consolas, "Courier New", monospace; font-size: 15.5px; line-height: 1.5; white-space: pre; color: #374151; }
+  .tree .f { display: inline-block; width: 300px; white-space: pre; } .tree .tag { font-family: "Segoe UI", Arial, sans-serif; font-size: 12.5px; font-weight: 600; color: #fff; background: #0891b2; border-radius: 10px; padding: 1px 8px; margin-left: 8px; } .tree .c { color: #6b7280; }
+  .tree b { color: #0e7490; }
+  .gain { flex: 1; border: 2px solid #16a34a; border-radius: 14px; padding: 16px 22px; background: #f0fdf4; }
+  .gain ul { list-style: none; }
+  .gain li { font-size: 16.5px; padding: 5px 0; }
+  .gain li::before { content: "✔"; color: #16a34a; font-weight: 700; margin-right: 10px; }
+  .cp { display: block; margin-top: 8px; font-size: 14px; line-height: 1.9; color: #374151; }
+  .cp code { font-size: 13.5px; }
+  .cp { display: block; margin-top: 8px; }
+  .cp > span { display: block; font-size: 14px; line-height: 1.5; padding: 2px 0 2px 9px; border-left: 3px solid #0891b2; margin-top: 5px; white-space: nowrap; }
+  .cp code { font-size: 13px; padding: 1px 4px; }
+</style>
+</head>
+<body>
+  <h1>Next.js Standalone Deployment Flow</h1>
+
+  <div class="row">
+    <div class="stage s1">
+      <div class="head">Code Repository<small>One-time change</small></div>
+      <ul>
+        <li><span class="n">1</span><span>Set <code>output: "standalone"</code> in <code>next.config.ts</code></span></li>
+      </ul>
+    </div>
+
+    <div class="arrow">
+      <span>Trigger build</span>
+      <svg viewBox="0 0 100 30" preserveAspectRatio="none"><line x1="0" y1="15" x2="88" y2="15" stroke="#9ca3af" stroke-width="3"/><polygon points="86,5 100,15 86,25" fill="#9ca3af"/></svg>
+    </div>
+
+    <div class="stage s2">
+      <div class="head">Jenkins<small>Build &amp; package</small></div>
+      <ul>
+        <li><span class="n">2</span><span>Install dependencies and build (Node 22)</span></li>
+        <li><span class="n">3</span><span>Copy static assets, then zip <code>standalone/</code><span class="cp"><span><code>public</code> → <code>standalone/</code></span><span><code>.next/static</code> → <code>standalone/.next/</code></span></span></span></li>
+      </ul>
+    </div>
+
+    <div class="arrow">
+      <span>Copy zip</span>
+      <svg viewBox="0 0 100 30" preserveAspectRatio="none"><line x1="0" y1="15" x2="88" y2="15" stroke="#9ca3af" stroke-width="3"/><polygon points="86,5 100,15 86,25" fill="#9ca3af"/></svg>
+    </div>
+
+    <div class="stage s3">
+      <div class="head">Application Server<small>Deploy &amp; run</small></div>
+      <ul>
+        <li><span class="n">4</span><span>Extract zip in the application folder</span></li>
+        <li><span class="n">5</span><span>Start <code>standalone/server.js</code> with PM2</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="zip">
+      <h2>Zip artifact structure</h2>
+      <div class="tree"><div><span class="f">document-automation-sit.zip</span><span class="c"></span></div><div><span class="f">└── <b>standalone/</b></span><span class="c">deployment folder</span></div><div><span class="f">    ├── <b>server.js</b></span><span class="c">entry point started by PM2</span></div><div><span class="f">    ├── package.json</span><span class="c">app metadata</span></div><div><span class="f">    ├── <b>node_modules/</b></span><span class="c">trimmed – only runtime packages</span></div><div><span class="f">    ├── <b>.next/</b></span><span class="c"></span></div><div><span class="f">    │   ├── server/</span><span class="c">compiled application</span></div><div><span class="f">    │   ├── static/</span><span class="c">CSS, JS files</span> <span class="tag">copied from .next/static</span></div><div><span class="f">    │   └── *.json, BUILD_ID</span><span class="c">build manifests</span></div><div><span class="f">    └── <b>public/</b></span><span class="c">images, fonts, files</span> <span class="tag">copied from public</span></div></div>
+    </div>
+    <div class="gain">
+      <h2>What the server no longer needs</h2>
+      <ul>
+        <li>No <code>npm install</code></li>
+        <li>No build step</li>
+        <li>No full <code>node_modules</code></li>
+        <li>No source code</li>
+        <li>Only Node 22 + PM2</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
