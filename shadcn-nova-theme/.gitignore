@@ -34,3 +34,25 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editors
+.vscode/
+.idea/
+
+# logs
+*.log
+
+# redis (if run locally against this project's working directory)
+dump.rdb
+
+
+.claude
+db/migrations/*
+package-lock.json
+bun.lock
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+
